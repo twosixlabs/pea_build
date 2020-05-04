@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This work was modified by Two Six Labs, LLC and is sponsored by a subcontract agreement with
+# Raytheon BBN Technologies Corp. under Prime Contract No. FA8750-16-C-0006 with the Air Force
+# Research Laboratory (AFRL).
+#
+# The Government has unlimited rights to use, modify, reproduce, release, perform, display, or disclose
+# computer software or computer software documentation marked with this legend. Any reproduction of
+# technical data, computer software, or portions thereof marked with this legend must also reproduce
+# this marking.
+#
+# Copyright (C) 2020 Two Six Labs, LLC.  All rights reserved.
+
 
 # If they didn't define PRODUCT_SDK_ADDON_NAME, then we won't define
 # any of these rules.
@@ -51,6 +62,16 @@ $(foreach cf,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SDK_ADDON_COPY_MODULES), \
  )
 endif
 
+# stubbed .java files
+ifneq ($(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SDK_ADDON_STUB_MODULES)),)
+$(foreach cf,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SDK_ADDON_STUB_MODULES), \
+  $(eval _src := $(call module-built-files,$(call word-colon,1,$(cf)))) \
+  $(eval _dest := $(call word-colon,2,$(cf))) \
+  $(eval files_to_copy += $(addon_dir_leaf):$(_src):$(_dest)) \
+ )
+endif
+
+
 # Files that are copied directly into the sdk-addon
 ifneq ($(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SDK_ADDON_COPY_FILES)),)
 $(foreach cf,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SDK_ADDON_COPY_FILES), \
@@ -66,6 +87,8 @@ files_to_copy += \
 	$(addon_dir_img):$(INSTALLED_QEMU_SYSTEMIMAGE):images/$(TARGET_CPU_ABI)/system.img \
 	$(addon_dir_img):$(INSTALLED_QEMU_VENDORIMAGE):images/$(TARGET_CPU_ABI)/vendor.img \
 	$(addon_dir_img):$(BUILT_RAMDISK_TARGET):images/$(TARGET_CPU_ABI)/ramdisk.img \
+	$(addon_dir_img):$(PRODUCT_OUT)/encryptionkey.img:images/$(TARGET_CPU_ABI)/encryptionkey.img \
+	$(addon_dir_img):$(PRODUCT_OUT)/advancedFeatures.ini:images/$(TARGET_CPU_ABI)/advancedFeatures.ini \
 	$(addon_dir_img):$(PRODUCT_OUT)/system/build.prop:images/$(TARGET_CPU_ABI)/build.prop \
 	$(addon_dir_img):device/generic/goldfish/data/etc/userdata.img:images/$(TARGET_CPU_ABI)/userdata.img \
 	$(addon_dir_img):$(target_notice_file_txt):images/$(TARGET_CPU_ABI)/NOTICE.txt \

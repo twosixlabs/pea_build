@@ -199,6 +199,8 @@ org\.ccil\.cowan\.tagsoup\.jaxp
 # framework.jar
 javax\.microedition\.khronos\.opengles
 javax\.microedition\.khronos\.egl
+com\.twosixlabs\.requirespermissioncodeinjection
+org\.aspectj\..*
 
 android
 
